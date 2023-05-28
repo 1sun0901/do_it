@@ -119,7 +119,7 @@ class TestView(TestCase):
         self.assertIn(self.post_001.title, post_area.text)
         self.assertIn(self.category_programming.name, post_area.text)
 
-        self.assertIn(self.user_trump.username.upper(), post_area.text)
+        self.assertIn(self.user_trump.username, post_area.text)
         self.assertIn(self.post_001.content, post_area.text)
 
     def test_category_page(self):

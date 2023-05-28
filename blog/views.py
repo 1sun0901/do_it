@@ -17,6 +17,12 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'blog/single_post_page.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(PostDetail, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = Post.objects.filter(category=None).count()
+        return context
+
 # Create your views here.
 # def index(request):
     # posts = Post.objects.all().order_by('-pk')
