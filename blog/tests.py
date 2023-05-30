@@ -91,7 +91,7 @@ class TestView(TestCase):
         post_001_card = main_area.find('div', id='post-1')  # id가 post-1인 div를 찾아서, 그 안에
         self.assertIn(self.post_001.title, post_001_card.text)  # title이 있는지
         self.assertIn(self.post_001.category.name, post_001_card.text)  # category가 있는지
-        self.assertIn(self.post_001.author.username, post_001_card.text)  # 작성자명이 있는지
+        self.assertIn(self.post_001.author.username.upper(), post_001_card.text)  # 작성자명이 있는지
         self.assertIn(self.tag_hello.name, post_001_card.text)
         self.assertNotIn(self.tag_python.name, post_001_card.text)
         self.assertNotIn(self.tag_python_kor.name, post_001_card.text)
@@ -99,7 +99,7 @@ class TestView(TestCase):
         post_002_card = main_area.find('div', id='post-2')
         self.assertIn(self.post_002.title, post_002_card.text)
         self.assertIn(self.post_002.category.name, post_002_card.text)
-        self.assertIn(self.post_002.author.username, post_002_card.text)
+        self.assertIn(self.post_002.author.username.upper(), post_002_card.text)
         self.assertNotIn(self.tag_hello.name, post_002_card.text)
         self.assertNotIn(self.tag_python.name, post_002_card.text)
         self.assertNotIn(self.tag_python_kor.name, post_002_card.text)
@@ -107,7 +107,7 @@ class TestView(TestCase):
         post_003_card = main_area.find('div', id='post-3')
         self.assertIn('미분류', post_003_card.text)
         self.assertIn(self.post_003.title, post_003_card.text)
-        self.assertIn(self.post_003.author.username, post_003_card.text)
+        self.assertIn(self.post_003.author.username.upper(), post_003_card.text)
         self.assertNotIn(self.tag_hello.name, post_003_card.text)
         self.assertIn(self.tag_python.name, post_003_card.text)
         self.assertIn(self.tag_python_kor.name, post_003_card.text)
@@ -137,7 +137,7 @@ class TestView(TestCase):
         self.assertIn(self.post_001.title, post_area.text)
         self.assertIn(self.category_programming.name, post_area.text)
 
-        self.assertIn(self.user_trump.username, post_area.text)
+        self.assertIn(self.user_trump.username.upper(), post_area.text)
         self.assertIn(self.post_001.content, post_area.text)
 
         self.assertIn(self.tag_hello.name, post_area.text)
