@@ -11,6 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 class PostList(ListView):
     model = Post
     template_name = 'blog/index.html'
+    paginate_by = 5
+    ordering = '-pk'
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data()
