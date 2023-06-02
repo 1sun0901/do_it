@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 
 from blog.forms import CommentForm
-from blog.models import Post, Category, Tag
+from blog.models import Post, Category, Tag, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -95,7 +95,6 @@ class PostUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 self.object.tags.add(tag)
 
         return response
-
     def get_context_data(self, **kwargs):
         context = super(PostUpdate, self).get_context_data()
         if self.object.tags.exists():
@@ -104,6 +103,18 @@ class PostUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 tags_str_list.append(t.name)
             context['tags_str_default'] = '; '.join(tags_str_list)
         return context
+
+class CommentUpdate(LoginRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(CommentUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+
 
 # Create your views here.
 # def index(request):
