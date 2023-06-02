@@ -97,7 +97,7 @@ class TestView(TestCase):
         post_001_card = main_area.find('div', id='post-1')  # id가 post-1인 div를 찾아서, 그 안에
         self.assertIn(self.post_001.title, post_001_card.text)  # title이 있는지
         self.assertIn(self.post_001.category.name, post_001_card.text)  # category가 있는지
-        self.assertIn(self.post_001.author.username.upper(), post_001_card.text)  # 작성자명이 있는지
+        self.assertIn(self.post_001.author.username, post_001_card.text)  # 작성자명이 있는지
         self.assertIn(self.tag_hello.name, post_001_card.text)
         self.assertNotIn(self.tag_python.name, post_001_card.text)
         self.assertNotIn(self.tag_python_kor.name, post_001_card.text)
@@ -105,7 +105,7 @@ class TestView(TestCase):
         post_002_card = main_area.find('div', id='post-2')
         self.assertIn(self.post_002.title, post_002_card.text)
         self.assertIn(self.post_002.category.name, post_002_card.text)
-        self.assertIn(self.post_002.author.username.upper(), post_002_card.text)
+        self.assertIn(self.post_002.author.username, post_002_card.text)
         self.assertNotIn(self.tag_hello.name, post_002_card.text)
         self.assertNotIn(self.tag_python.name, post_002_card.text)
         self.assertNotIn(self.tag_python_kor.name, post_002_card.text)
@@ -113,7 +113,7 @@ class TestView(TestCase):
         post_003_card = main_area.find('div', id='post-3')
         self.assertIn('미분류', post_003_card.text)
         self.assertIn(self.post_003.title, post_003_card.text)
-        self.assertIn(self.post_003.author.username.upper(), post_003_card.text)
+        self.assertIn(self.post_003.author.username, post_003_card.text)
         self.assertNotIn(self.tag_hello.name, post_003_card.text)
         self.assertIn(self.tag_python.name, post_003_card.text)
         self.assertIn(self.tag_python_kor.name, post_003_card.text)
@@ -143,7 +143,7 @@ class TestView(TestCase):
         self.assertIn(self.post_001.title, post_area.text)
         self.assertIn(self.category_programming.name, post_area.text)
 
-        self.assertIn(self.user_trump.username.upper(), post_area.text)
+        self.assertIn(self.user_trump.username, post_area.text)
         self.assertIn(self.post_001.content, post_area.text)
 
         self.assertIn(self.tag_hello.name, post_area.text)
@@ -434,4 +434,22 @@ class TestView(TestCase):
         self.assertEqual(Comment.objects.count(), 1)
         self.assertEqual(self.post_001.comment_set.count(), 1)
 
+    def test_search(self):
+        post_about_python = Post.objects.create(
+            title='파이썬에 대한 포스트입니다.',
+            content='Hello World. We are the world.',
+            author=self.user_trump
+        )
+
+        response = self.client.get('/blog/search/파이썬/')
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        main_area = soup.find('div', id='main-area')
+
+        self.assertIn('Search: 파이썬 (2)', main_area.text)
+        self.assertNotIn(self.post_001.title, main_area.text)
+        self.assertNotIn(self.post_002.title, main_area.text)
+        self.assertIn(self.post_003.title, main_area.text)
+        self.assertIn(post_about_python.title, main_area.text)
 
