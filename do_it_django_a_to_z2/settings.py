@@ -28,7 +28,7 @@ DEBUG = int(os.environ.get('DEBUG', 1))
 if os.environ.get('DJANGO_ALLOWED_HOSTS'):
     ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
 else:
-    ALLOWED_HOSTS = ['43.200.30.69']
+    ALLOWED_HOSTS = ['43.200.30.69', 'localhost', '127.0.0.1']
 
 
 
